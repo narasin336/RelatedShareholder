@@ -47,9 +47,9 @@ namespace RelatedShareholder
         public static string GlobalRelatedIDA = "";
         public static string GlobalRelationType = "";
 
-        public static string GlobalDataBase = "...";
-        public static string GlobalServer = "...";
-        public static string GlobalDataBaseUserID = "...";
-        public static string GlobalDataBasePassword = "...";
+        public static string GlobalDataBase = "";
+        public static string GlobalServer = "";
+        public static string GlobalDataBaseUserID = "";
+        public static string GlobalDataBasePassword = "";
     }
 }

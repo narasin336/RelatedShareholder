@@ -7,13 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Data.OleDb;
 
 namespace RelatedShareholder
 {
     public partial class RelationStatus : Form
     {
-       // SqlConnection conn = new SqlConnection("Server=192.168.4.4;Database=PST_SUBDATA;User Id=sa;Password=p@ssw0rd;MultipleActiveResultSets=True");
-        SqlConnection conn = new SqlConnection("Server=" + MyGlobal.GlobalServer + ";Database=" + MyGlobal.GlobalDataBase + ";User Id= '" + MyGlobal.GlobalDataBaseUserID + "';Password= '" + MyGlobal.GlobalDataBasePassword + "';MultipleActiveResultSets=True");
+        // SqlConnection conn = new SqlConnection("Server=192.168.4.4;Database=PST_SUBDATA;User Id=sa;Password=p@ssw0rd;MultipleActiveResultSets=True");
+        // SqlConnection conn = new SqlConnection("Server=" + MyGlobal.GlobalServer + ";Database=" + MyGlobal.GlobalDataBase + ";User Id= '" + MyGlobal.GlobalDataBaseUserID + "';Password= '" + MyGlobal.GlobalDataBasePassword + "';MultipleActiveResultSets=True");
+        private OleDbConnection conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0; Data Source = |DataDirectory|\\Database.accdb");
 
         public RelationStatus()
         {
@@ -37,8 +39,8 @@ namespace RelatedShareholder
             dataGridView1.Columns[varindex].Width = 150;
 
             string sql = "Select * from IR_RelationStatus";
-            SqlCommand com = new SqlCommand(sql, conn);
-            SqlDataReader dr = com.ExecuteReader();
+            OleDbCommand com = new OleDbCommand(sql, conn);
+            OleDbDataReader dr = com.ExecuteReader();
             while (dr.Read())
             {
                 dataGridView1.Rows.Add(dr["RelationType"].ToString());

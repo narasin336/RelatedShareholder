@@ -9,13 +9,13 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Threading;
+using System.Data.OleDb;
 
 namespace RelatedShareholder
 {
     public partial class ShowShareholder : Form
     {
-       // SqlConnection conn = new SqlConnection("Server=192.168.4.4;Database=PST_SUBDATA;User Id=sa;Password=p@ssw0rd;MultipleActiveResultSets=True");
-        SqlConnection conn = new SqlConnection("Server=" + MyGlobal.GlobalServer + ";Database=" + MyGlobal.GlobalDataBase + ";User Id= '" + MyGlobal.GlobalDataBaseUserID + "';Password= '" + MyGlobal.GlobalDataBasePassword + "';MultipleActiveResultSets=True");
+        private OleDbConnection conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0; Data Source = |DataDirectory|\\Database.accdb");
 
         public ShowShareholder()
         {
@@ -36,7 +36,7 @@ namespace RelatedShareholder
                 Showdata();
                 progressThread.Abort();
             }
-            catch { Showdata(); }     
+            catch { Showdata(); }
         }
 
         private void Showdata()
@@ -46,7 +46,7 @@ namespace RelatedShareholder
             dataGridView1.Rows.Clear();
             dataGridView1.ColumnCount = 8;
 
-            
+
             dataGridView1.Columns[varindex].Name = "รหัสผู้ถือหุ้น";
             dataGridView1.Columns[varindex].Width = 100;
 
@@ -78,7 +78,7 @@ namespace RelatedShareholder
             dataGridView1.Columns[varindex].Name = "Status";
             dataGridView1.Columns[varindex].Width = 90;
 
-            
+
             int varCount = 0;
             string sql = "";
             if (txtRelationName.Text == "")
@@ -90,18 +90,18 @@ namespace RelatedShareholder
             {
                 sql = "Select * from (IR_Shareholder inner join IR_RelationPerson on IR_Shareholder.ShareholderID = IR_RelationPerson.ShareholderID) inner join IR_RelationData on IR_RelationPerson.RelatedID = IR_RelationData.RelatedID where IR_RelationPerson.RelatedPerson like '%' + '" + txtRelationName.Text + "' + '%'  order by IR_RelationPerson.RelatedPerson";
             }
-     
-            
-            SqlCommand com = new SqlCommand(sql, conn);
-            SqlDataReader dr = com.ExecuteReader();
+
+
+            OleDbCommand com = new OleDbCommand(sql, conn);
+            OleDbDataReader dr = com.ExecuteReader();
             while (dr.Read())
             {
                 string varStatus = "";
                 string varShareholdername = "";
-                string varShareholderID = dr["RelatedID"].ToString().Substring(0,6);
+                string varShareholderID = dr["RelatedID"].ToString().Substring(0, 6);
                 string sql1 = "Select * from IR_Shareholder where ShareholderID = '" + varShareholderID + "' ";
-                SqlCommand com1 = new SqlCommand(sql1, conn);
-                SqlDataReader dr1 = com1.ExecuteReader();
+                OleDbCommand com1 = new OleDbCommand(sql1, conn);
+                OleDbDataReader dr1 = com1.ExecuteReader();
                 while (dr1.Read())
                 {
                     varShareholdername = dr1["ShareholderName"].ToString();
@@ -110,7 +110,7 @@ namespace RelatedShareholder
 
                 dr1.Close();
 
-                if(dr["Status"].ToString() == "N")
+                if (dr["Status"].ToString() == "N")
                 {
                     varStatus = "ยกเลิกปี61";
                 }
@@ -118,13 +118,13 @@ namespace RelatedShareholder
                 dataGridView1.Rows.Add(varShareholderID, varShareholdername, dr["RelatedID"].ToString(), dr["RelatedPerson"].ToString(), dr["RelatedStatus"].ToString(), dr["RelatedCompany"].ToString(), dr["RelatedType"].ToString(), varStatus);
 
                 if (dr["Status"].ToString() == "N")
-                        dataGridView1.Rows[varCount].DefaultCellStyle.BackColor = Color.Gray;
-                   varCount = varCount + 1;
+                    dataGridView1.Rows[varCount].DefaultCellStyle.BackColor = Color.Gray;
+                varCount = varCount + 1;
             }
 
-           
+
             dr.Close();
-          
+
         }
 
         private void Showdata2()
@@ -179,16 +179,16 @@ namespace RelatedShareholder
 
 
 
-            SqlCommand com = new SqlCommand(sql, conn);
-            SqlDataReader dr = com.ExecuteReader();
+            OleDbCommand com = new OleDbCommand(sql, conn);
+            OleDbDataReader dr = com.ExecuteReader();
             while (dr.Read())
             {
                 string varStatus2 = "";
                 string varShareholdername = "";
                 string varShareholderID = dr["RelatedID"].ToString().Substring(0, 6);
                 string sql1 = "Select * from IR_Shareholder where ShareholderID = '" + varShareholderID + "' ";
-                SqlCommand com1 = new SqlCommand(sql1, conn);
-                SqlDataReader dr1 = com1.ExecuteReader();
+                OleDbCommand com1 = new OleDbCommand(sql1, conn);
+                OleDbDataReader dr1 = com1.ExecuteReader();
                 while (dr1.Read())
                 {
                     varShareholdername = dr1["ShareholderName"].ToString();
@@ -202,7 +202,7 @@ namespace RelatedShareholder
                     varStatus2 = "ยกเลิกปี61";
                 }
 
-                dataGridView1.Rows.Add(varShareholderID, varShareholdername, dr["RelatedID"].ToString(), dr["RelatedPerson"].ToString(), dr["RelatedStatus"].ToString(), dr["RelatedCompany"].ToString(), dr["RelatedType"].ToString(),varStatus2);
+                dataGridView1.Rows.Add(varShareholderID, varShareholdername, dr["RelatedID"].ToString(), dr["RelatedPerson"].ToString(), dr["RelatedStatus"].ToString(), dr["RelatedCompany"].ToString(), dr["RelatedType"].ToString(), varStatus2);
                 if (dr["Status"].ToString() == "N")
                     dataGridView1.Rows[varCount].DefaultCellStyle.BackColor = Color.Gray;
                 varCount = varCount + 1;
@@ -211,8 +211,8 @@ namespace RelatedShareholder
         }
 
         private void bttSearchCompany_Click(object sender, EventArgs e)
-        {         
-          
+        {
+
             Showdata2();
 
         }
@@ -305,7 +305,7 @@ namespace RelatedShareholder
         }
 
         private void bttRelationName_Click(object sender, EventArgs e)
-        {          
+        {
             Showdata();
         }
 
@@ -315,7 +315,7 @@ namespace RelatedShareholder
             WinD3.Show();
         }
 
-    
+
 
     }
 }

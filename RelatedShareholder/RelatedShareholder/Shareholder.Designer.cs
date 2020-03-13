@@ -359,7 +359,7 @@
             this.bttAdd.Location = new System.Drawing.Point(386, 12);
             this.bttAdd.Name = "bttAdd";
             this.bttAdd.Size = new System.Drawing.Size(75, 31);
-            this.bttAdd.TabIndex = 16;
+            this.bttAdd.TabIndex = 17;
             this.bttAdd.Text = "Add";
             this.bttAdd.UseVisualStyleBackColor = false;
             this.bttAdd.Click += new System.EventHandler(this.bttAdd_Click);
@@ -468,7 +468,7 @@
             this.txtRelatedPST.Location = new System.Drawing.Point(144, 624);
             this.txtRelatedPST.Name = "txtRelatedPST";
             this.txtRelatedPST.Size = new System.Drawing.Size(233, 20);
-            this.txtRelatedPST.TabIndex = 43;
+            this.txtRelatedPST.TabIndex = 16;
             // 
             // label17
             // 

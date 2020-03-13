@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Data.OleDb;
 
 namespace RelatedShareholder
 {
@@ -15,8 +16,9 @@ namespace RelatedShareholder
         int valErr = 0;
         string varInactive = "";
 
-      //  SqlConnection conn = new SqlConnection("Server=192.168.4.4;Database=PST_SUBDATA;User Id=sa;Password=p@ssw0rd;MultipleActiveResultSets=True");
-        SqlConnection conn = new SqlConnection("Server=" + MyGlobal.GlobalServer + ";Database=" + MyGlobal.GlobalDataBase + ";User Id= '" + MyGlobal.GlobalDataBaseUserID + "';Password= '" + MyGlobal.GlobalDataBasePassword + "';MultipleActiveResultSets=True");
+        //  SqlConnection conn = new SqlConnection("Server=192.168.4.4;Database=PST_SUBDATA;User Id=sa;Password=p@ssw0rd;MultipleActiveResultSets=True");
+        // SqlConnection conn = new SqlConnection("Server=" + MyGlobal.GlobalServer + ";Database=" + MyGlobal.GlobalDataBase + ";User Id= '" + MyGlobal.GlobalDataBaseUserID + "';Password= '" + MyGlobal.GlobalDataBasePassword + "';MultipleActiveResultSets=True");
+        private OleDbConnection conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0; Data Source = |DataDirectory|\\Database.accdb");
 
         public Shareholder()
         {
@@ -139,12 +141,12 @@ namespace RelatedShareholder
                 sql = "Select * from IR_Shareholder where IR_Shareholder.ShareholderName like '%' + '" + txtSearchName.Text + "' + '%'  order by IR_Shareholder.ShareholderName";             
             }
 
-            
-            SqlCommand com = new SqlCommand(sql, conn);
-            SqlDataReader dr = com.ExecuteReader();
+
+            OleDbCommand com = new OleDbCommand(sql, conn);
+            OleDbDataReader dr = com.ExecuteReader();
             while (dr.Read())
             {
-                dataGridView1.Rows.Add(dr["ShareholderID"].ToString(), dr["ShareholderName"].ToString(), dr["OriginalName"].ToString(), dr["RegisterAddress"].ToString(), dr["PresentAddress"].ToString(), dr["Telephone1"].ToString(), dr["Telephone2"].ToString(), dr["Email"].ToString(), dr["WorkingCompany"].ToString(), dr["Position"].ToString(), dr["DateofBirth"].ToString(), dr["Education1"].ToString(), dr["Education2"].ToString(), dr["Education3"].ToString(), dr["Education4"].ToString(), dr["Education5"].ToString(), dr["ShareQty"].ToString(), dr["RelatedPST"].ToString(), dr["Inactive"].ToString(), dr["Inactive_Date"].ToString());
+                dataGridView1.Rows.Add(dr["ShareholderID"].ToString(), dr["ShareholderName"].ToString(), dr["OriginalName"].ToString(), dr["RegisterAddress"].ToString(), dr["PresentAddress"].ToString(), dr["Telephone1"].ToString(), dr["Telephone2"].ToString(), dr["Email"].ToString(), dr["WorkingCompany"].ToString(), dr["Positions"].ToString(), dr["DateofBirth"].ToString(), dr["Education1"].ToString(), dr["Education2"].ToString(), dr["Education3"].ToString(), dr["Education4"].ToString(), dr["Education5"].ToString(), dr["ShareQty"].ToString(), dr["RelatedPST"].ToString(), dr["Inactive"].ToString(), dr["Inactive_Date"].ToString());
 
                 if (dr["Inactive"].ToString() == "Y") 
                 dataGridView1.Rows[varCount].DefaultCellStyle.BackColor = Color.Gray;
@@ -218,9 +220,9 @@ namespace RelatedShareholder
                 if (checkBox1.Checked == true) { varInactive = "Y"; }
                 else if (checkBox1.Checked == false) { varInactive = ""; }
 
-                String sql = "INSERT INTO IR_Shareholder (ShareholderID,ShareholderName,OriginalName,RegisterAddress,PresentAddress,Telephone1,Telephone2,Email,WorkingCompany,Position,DateofBirth,Education1,Education2,Education3,Education4,Education5,ShareQty,RelatedPST,Inactive)VALUES ('" + txtShareholderID.Text + "','" + txtShareholderName.Text + "','" + txtOrigianlName.Text + "','" + txtRegisterAddress.Text + "','" + txtPresentAddress.Text + "','" + txtTelePhone1.Text + "','" + txtTelePhone2.Text + "','" + txtEmail.Text + "','" + txtWorkingCompany.Text + "','" + txtPosition.Text + "','" + txtDateofBrith.Text + "','" + txtEducation1.Text + "','" + txtEducation2.Text + "','" + txtEducation3.Text + "','" + txtEducation4.Text + "','" + txtEducation5.Text + "','" + txtShareQty.Text + "','" + txtRelatedPST.Text + "','" + varInactive + "')";
-
-                SqlCommand com = new SqlCommand(sql, conn);
+                String sql = @"INSERT INTO IR_Shareholder (ShareholderID,ShareholderName,OriginalName,RegisterAddress,PresentAddress,Telephone1,Telephone2,Email,WorkingCompany,Positions,DateofBirth,Education1,Education2,Education3,Education4,Education5,ShareQty,RelatedPST,Inactive)VALUES ('" + txtShareholderID.Text + "','" + txtShareholderName.Text + "','" + txtOrigianlName.Text + "','" + txtRegisterAddress.Text + "','" + txtPresentAddress.Text + "','" + txtTelePhone1.Text + "','" + txtTelePhone2.Text + "','" + txtEmail.Text + "','" + txtWorkingCompany.Text + "','" + txtPosition.Text + "','" + txtDateofBrith.Text + "','" + txtEducation1.Text + "','" + txtEducation2.Text + "','" + txtEducation3.Text + "','" + txtEducation4.Text + "','" + txtEducation5.Text + "','" + txtShareQty.Text + "','" + txtRelatedPST.Text + "','" + varInactive + "')";
+                
+                OleDbCommand com = new OleDbCommand(sql, conn);
                 com.ExecuteNonQuery();
                 MessageBox.Show("Add completed");
 
@@ -292,8 +294,8 @@ namespace RelatedShareholder
                 if (checkBox1.Checked == true) { varInactive = "Y"; }
                 else if (checkBox1.Checked == false) { varInactive = ""; }
 
-                String sql = "Update IR_Shareholder SET ShareholderName = '" + txtShareholderName.Text + "', OriginalName = '" + txtOrigianlName.Text + "', RegisterAddress = '" + txtRegisterAddress.Text + "' , PresentAddress = '" + txtPresentAddress.Text + "', Telephone1 = '" + txtTelePhone1.Text + "', Telephone2 = '" + txtTelePhone2.Text + "', Email = '" + txtEmail.Text + "', WorkingCompany = '" + txtWorkingCompany.Text + "', Position = '" + txtPosition.Text + "', DateofBirth = '" + txtDateofBrith.Text + "', Education1 = '" + txtEducation1.Text + "', Education2 = '" + txtEducation2.Text + "', Education3 = '" + txtEducation3.Text + "', Education4 = '" + txtEducation4.Text + "', Education5 = '" + txtEducation5.Text + "', ShareQty = '" + txtShareQty.Text + "', RelatedPST = '" + txtRelatedPST.Text + "', Inactive = '" + varInactive + "', Inactive_Date = '" + txtDateInactive.Text + "' where ShareholderID = '" + txtShareholderID.Text + "'";
-                SqlCommand com = new SqlCommand(sql, conn);
+                String sql = "Update IR_Shareholder SET ShareholderName = '" + txtShareholderName.Text + "', OriginalName = '" + txtOrigianlName.Text + "', RegisterAddress = '" + txtRegisterAddress.Text + "' , PresentAddress = '" + txtPresentAddress.Text + "', Telephone1 = '" + txtTelePhone1.Text + "', Telephone2 = '" + txtTelePhone2.Text + "', Email = '" + txtEmail.Text + "', WorkingCompany = '" + txtWorkingCompany.Text + "', Positions = '" + txtPosition.Text + "', DateofBirth = '" + txtDateofBrith.Text + "', Education1 = '" + txtEducation1.Text + "', Education2 = '" + txtEducation2.Text + "', Education3 = '" + txtEducation3.Text + "', Education4 = '" + txtEducation4.Text + "', Education5 = '" + txtEducation5.Text + "', ShareQty = '" + txtShareQty.Text + "', RelatedPST = '" + txtRelatedPST.Text + "', Inactive = '" + varInactive + "', Inactive_Date = '" + txtDateInactive.Text + "' where ShareholderID = '" + txtShareholderID.Text + "'";
+                OleDbCommand com = new OleDbCommand(sql, conn);
                 com.ExecuteNonQuery();
 
                 MessageBox.Show("Update completed");
@@ -313,8 +315,8 @@ namespace RelatedShareholder
             sql1 = "Select * from IR_RelationPerson where ShareholderID = '" + txtShareholderID.Text + "' ";
 
 
-            SqlCommand com1 = new SqlCommand(sql1, conn);
-            SqlDataReader dr1 = com1.ExecuteReader();
+            OleDbCommand com1 = new OleDbCommand(sql1, conn);
+            OleDbDataReader dr1 = com1.ExecuteReader();
             while (dr1.Read())
             {
                 MessageBox.Show("ไม่สามารถลบได้เพราะมีข้อมูลอยู่", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); return;
@@ -325,7 +327,7 @@ namespace RelatedShareholder
             if (MessageBox.Show("Do you want to delete the data ? " + txtShareholderID.Text, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 String sql = "Delete from IR_Shareholder where ShareholderID ='" + txtShareholderID.Text + "' ";
-                SqlCommand com = new SqlCommand(sql, conn);
+                OleDbCommand com = new OleDbCommand(sql, conn);
                 com.ExecuteNonQuery();
 
                 MessageBox.Show("Delete completed");

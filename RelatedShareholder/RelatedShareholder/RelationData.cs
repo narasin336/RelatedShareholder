@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Data.OleDb;
 
 namespace RelatedShareholder
 {
@@ -14,8 +15,7 @@ namespace RelatedShareholder
     {
         int valErr = 0;
 
-    //    SqlConnection conn = new SqlConnection("Server=192.168.4.4;Database=PST_SUBDATA;User Id=sa;Password=p@ssw0rd;MultipleActiveResultSets=True");
-        SqlConnection conn = new SqlConnection("Server=" + MyGlobal.GlobalServer + ";Database=" + MyGlobal.GlobalDataBase + ";User Id= '" + MyGlobal.GlobalDataBaseUserID + "';Password= '" + MyGlobal.GlobalDataBasePassword + "';MultipleActiveResultSets=True");
+        private OleDbConnection conn = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0; Data Source = |DataDirectory|\\Database.accdb");
 
         public RelationData()
         {
@@ -91,8 +91,8 @@ namespace RelatedShareholder
             dataGridView1.Columns[varindex].Width = 100;
 
             string sql = "Select * from IR_RelationData where RelatedId = '" + txtRelatedID.Text + "' order by IR_RelationData.RelatedID  ";
-            SqlCommand com = new SqlCommand(sql, conn);
-            SqlDataReader dr = com.ExecuteReader();
+            OleDbCommand com = new OleDbCommand(sql, conn);
+            OleDbDataReader dr = com.ExecuteReader();
             while (dr.Read())
             {
                 dataGridView1.Rows.Add(dr["ID"].ToString(), dr["RelatedID"].ToString(), dr["RelatedPerson"].ToString(), dr["RelatedCompany"].ToString(), dr["RelatedType"].ToString(), dr["InputDate"].ToString());
@@ -107,7 +107,7 @@ namespace RelatedShareholder
             {
                 String sql = "INSERT INTO IR_RelationData (RelatedID,RelatedPerson,RelatedCompany,RelatedType,InputDate)VALUES ('" + txtRelatedID.Text + "','" + txtRelationPerson.Text + "','" + txtRelatedCompany.Text + "','" + txtRelatedType.Text + "','" + txtDate.Text + "')";
 
-                SqlCommand com = new SqlCommand(sql, conn);
+                OleDbCommand com = new OleDbCommand(sql, conn);
                 com.ExecuteNonQuery();
                 MessageBox.Show("Add completed");
 
@@ -118,13 +118,13 @@ namespace RelatedShareholder
 
         //private void bttSearchRelatedID_Click(object sender, EventArgs e)
         //{
-            //SearchRelatedID WinD3 = new SearchRelatedID();
-            //WinD3.ShowDialog();
+        //SearchRelatedID WinD3 = new SearchRelatedID();
+        //WinD3.ShowDialog();
 
-            //txtRelatedID.Text = MyGlobal.GlobalRelatedID;
-            //txtRelationPerson.Text = MyGlobal.GlobalRelatedPerson;
-            //Showdata();
-       // }
+        //txtRelatedID.Text = MyGlobal.GlobalRelatedID;
+        //txtRelationPerson.Text = MyGlobal.GlobalRelatedPerson;
+        //Showdata();
+        // }
 
         private void bttClear_Click(object sender, EventArgs e)
         {
@@ -143,7 +143,7 @@ namespace RelatedShareholder
             if (MessageBox.Show("Do you want to Update the data ? " + txtID.Text, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 String sql = "Update IR_RelationData SET RelatedID = '" + txtRelatedID.Text + "', RelatedPerson = '" + txtRelationPerson.Text + "', RelatedCompany = '" + txtRelatedCompany.Text + "' , RelatedType = '" + txtRelatedType.Text + "' , InputDate = '" + txtDate.Text + "'where ID = '" + txtID.Text + "'";
-                SqlCommand com = new SqlCommand(sql, conn);
+                OleDbCommand com = new OleDbCommand(sql, conn);
                 com.ExecuteNonQuery();
 
                 MessageBox.Show("Update completed");
@@ -179,7 +179,7 @@ namespace RelatedShareholder
             if (MessageBox.Show("Do you want to delete the data ? " + txtID.Text, "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 String sql = "Delete from IR_RelationData where ID ='" + txtID.Text + "' ";
-                SqlCommand com = new SqlCommand(sql, conn);
+                OleDbCommand com = new OleDbCommand(sql, conn);
                 com.ExecuteNonQuery();
 
                 MessageBox.Show("Delete completed");
