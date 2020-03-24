@@ -98,7 +98,7 @@ namespace RelatedShareholder
             {
                 string varStatus = "";
                 string varShareholdername = "";
-                string varShareholderID = dr["RelatedID"].ToString().Substring(0, 6);
+                string varShareholderID = dr["IR_RelationPerson.RelatedID"].ToString().Substring(0, 6);
                 string sql1 = "Select * from IR_Shareholder where ShareholderID = '" + varShareholderID + "' ";
                 OleDbCommand com1 = new OleDbCommand(sql1, conn);
                 OleDbDataReader dr1 = com1.ExecuteReader();
@@ -115,7 +115,7 @@ namespace RelatedShareholder
                     varStatus = "ยกเลิกปี61";
                 }
 
-                dataGridView1.Rows.Add(varShareholderID, varShareholdername, dr["RelatedID"].ToString(), dr["RelatedPerson"].ToString(), dr["RelatedStatus"].ToString(), dr["RelatedCompany"].ToString(), dr["RelatedType"].ToString(), varStatus);
+                dataGridView1.Rows.Add(varShareholderID, varShareholdername, dr["IR_RelationPerson.RelatedID"].ToString(), dr["IR_RelationPerson.RelatedPerson"].ToString(), dr["RelatedStatus"].ToString(), dr["RelatedCompany"].ToString(), dr["RelatedType"].ToString(), varStatus);
 
                 if (dr["Status"].ToString() == "N")
                     dataGridView1.Rows[varCount].DefaultCellStyle.BackColor = Color.Gray;

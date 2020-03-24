@@ -30,7 +30,7 @@ namespace RelatedShareholder
             Tables CrTables;
 
             ReportDocument cryRpt = new ReportDocument();
-            cryRpt.Load(@"\\192.168.4.7\mis\Program\ProgramEXE\Shareholder.rpt");
+            cryRpt.Load(@"D:\MyProject\RelatedShareholder\RelatedShareholder\bin\Debug\Shareholder.rpt");
             crConnectionInfo.ServerName = MyGlobal.GlobalServer;
             crConnectionInfo.DatabaseName = MyGlobal.GlobalDataBase;
             crConnectionInfo.UserID = MyGlobal.GlobalDataBaseUserID;
